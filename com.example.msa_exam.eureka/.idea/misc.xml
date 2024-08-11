@@ -3,6 +3,8 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
+    <file type="web" url="file://$PROJECT_DIR$/../com.example.msa_exam.order" />
+    <file type="web" url="file://$PROJECT_DIR$/../com.example.msa_exam.product" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="temurin-20" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
