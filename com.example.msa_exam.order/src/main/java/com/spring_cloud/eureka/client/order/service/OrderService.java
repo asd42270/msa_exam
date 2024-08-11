@@ -7,6 +7,8 @@ import com.spring_cloud.eureka.client.order.entity.dto.OrderResponseDto;
 import com.spring_cloud.eureka.client.order.entity.dto.OrderUpdateRequestDto;
 import com.spring_cloud.eureka.client.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +24,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public void addOrder(OrderInsertRequestDto requestDto) {
+    @CachePut(value = "orderCache", key = "#result.id")
+    public OrderResponseDto addOrder(OrderInsertRequestDto requestDto) {
         // 주문을 저장
         Orders orders = Orders.builder()
                 .name(requestDto.name())
@@ -39,8 +42,13 @@ public class OrderService {
         orders.setProductIds(orderProducts);
 
         // 주문과 주문 매핑 상품을 함께 저장
-        orderRepository.save(orders);
-
+        Orders savedOrder = orderRepository.save(orders);
+        return OrderResponseDto.builder()
+                .orderId(savedOrder.getId())
+                .productIds(savedOrder.getProductIds().stream()
+                        .map(OrdersProduct::getProductId)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     public void updateOrder(Long orderId, OrderUpdateRequestDto requestDto) {
@@ -57,6 +65,7 @@ public class OrderService {
         orders.addOrdersProduct(ordersProduct);
     }
 
+    @Cacheable(value = "orderCache", key = "#orderId")
     public OrderResponseDto getOrder(Long orderId) {
 
         Orders orders = orderRepository.findById(orderId).orElseThrow(
