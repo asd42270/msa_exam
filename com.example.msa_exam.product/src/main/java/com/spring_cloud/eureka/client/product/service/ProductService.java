@@ -32,7 +32,6 @@ public class ProductService {
     public void addProduct(ProductInsertRequestDto requestDto) {
 
         Product product = Product.builder()
-                .productId(requestDto.productId())
                 .name(requestDto.name())
                 .supplyPrice(requestDto.supplyPrice())
                 .build();

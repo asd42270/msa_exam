@@ -1,6 +1,5 @@
 package com.spring_cloud.eureka.client.product.controller;
 
-import com.spring_cloud.eureka.client.product.entity.Product;
 import com.spring_cloud.eureka.client.product.entity.dto.ProductInsertRequestDto;
 import com.spring_cloud.eureka.client.product.entity.dto.ProductResponseDto;
 import com.spring_cloud.eureka.client.product.service.ProductService;
