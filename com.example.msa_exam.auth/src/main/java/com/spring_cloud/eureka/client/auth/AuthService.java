@@ -31,6 +31,7 @@ public class AuthService {
 
         return Jwts.builder()
                 .claim("user_id", user_id)
+                .claim("role", "USER")
                 .issuer(issuer)
                 .issuedAt(now)
                 .expiration(expiryDate)
