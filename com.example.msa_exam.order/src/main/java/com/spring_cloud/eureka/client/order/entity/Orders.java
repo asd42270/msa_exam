@@ -6,20 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
-public class OrderProduct {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    @Column(name = "order_id")
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @Column
+    private String name;
 
-    private Long productId;
+    @OneToMany(mappedBy = "orders")
+    private List<OrdersProduct> productIds = new ArrayList<>();
 }
