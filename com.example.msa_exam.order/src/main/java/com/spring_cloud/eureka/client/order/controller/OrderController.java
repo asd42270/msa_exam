@@ -1,6 +1,7 @@
 package com.spring_cloud.eureka.client.order.controller;
 
 import com.spring_cloud.eureka.client.order.entity.dto.OrderInsertRequestDto;
+import com.spring_cloud.eureka.client.order.entity.dto.OrderResponseDto;
 import com.spring_cloud.eureka.client.order.entity.dto.OrderUpdateRequestDto;
 import com.spring_cloud.eureka.client.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,13 @@ public class OrderController {
     ) {
         orderService.updateOrder(orderId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDto> getOrder(
+            @PathVariable("orderId") Long orderId
+    ) {
+        return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 
 

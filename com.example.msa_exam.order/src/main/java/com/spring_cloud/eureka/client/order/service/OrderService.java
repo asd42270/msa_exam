@@ -3,16 +3,19 @@ package com.spring_cloud.eureka.client.order.service;
 import com.spring_cloud.eureka.client.order.entity.Orders;
 import com.spring_cloud.eureka.client.order.entity.OrdersProduct;
 import com.spring_cloud.eureka.client.order.entity.dto.OrderInsertRequestDto;
+import com.spring_cloud.eureka.client.order.entity.dto.OrderResponseDto;
 import com.spring_cloud.eureka.client.order.entity.dto.OrderUpdateRequestDto;
 import com.spring_cloud.eureka.client.order.repository.OrderRepository;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,5 +57,19 @@ public class OrderService {
                 .build();
 
         orders.addOrdersProduct(ordersProduct);
+    }
+
+    public OrderResponseDto getOrder(Long orderId) {
+
+        Orders orders = orderRepository.findById(orderId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot Find Order")
+        );
+
+        return OrderResponseDto.builder()
+                .orderId(orders.getId())
+                .productIds(orders.getProductIds().stream()
+                        .map(OrdersProduct::getProductId)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }
